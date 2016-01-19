@@ -15,7 +15,7 @@
 <table width="100%">
 			<tr>
 			
-				<td>제목</td>
+				<td></td>
 				<td>
 				<input type="text" id="title" name="notice_title" class="form-control"/>
 				<input type="hidden" name="member_id" value="${studentNum}"/>
