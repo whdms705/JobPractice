@@ -12,7 +12,7 @@
 <table width="100%">
 
 
-	<form action="noticeInsert.do" method="post" enctype="multipart/form-data">
+	<form action="fileUpload.do" method="post" enctype="multipart/form-data">
 	
 	<tr>
 			
@@ -26,7 +26,7 @@
 			<tr>
 			<td>첨부파일</td>
 			<td>
-			<input type="file" name="notice_file" />
+			<input type="file" name="file1" />
 			</td>
 			</tr>
 			<tr>

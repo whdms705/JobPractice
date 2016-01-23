@@ -1,6 +1,7 @@
 package mvc1.board;
 
 import java.sql.Timestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 public class NoticeDTO {
 	

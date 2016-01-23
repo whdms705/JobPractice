@@ -8,5 +8,6 @@ public interface NoticeMapper {
 	void noticeInsert(NoticeDTO notice);
 	List<NoticeDTO> noticeList();
 	NoticeDTO noticeDetail(int nid);
+	void noticeTest(NoticeDTO notice);
 	
 }

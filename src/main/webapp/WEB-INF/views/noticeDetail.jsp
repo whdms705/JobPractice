@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script src="assets/js/notice.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -15,6 +17,18 @@
 <c:set var="title" value="${notice.notice_title }"/>
 <c:set var="content" value="${notice.notice_content}"/>
 <c:set var="file" value="${notice.notice_file }"/>
+
+
+<c:if test="${file==null}">
+  
+  </c:if>
+  <c:if test="${file!=null}">
+ 
+   <form id="downloadForm" action="fileDownload.do" method="post">
+   <input type="hidden" value="${file}" name="file">
+   </form>
+   
+  </c:if>
 
 <div id="article" >
 

@@ -18,10 +18,14 @@
 
 
 	<insert id="noticeInsert" useGeneratedKeys="true" keyProperty="id">
+		INSERT notice (member_id,notice_title,notice_content)
+		VALUES (#{member_id},#{notice_title},#{notice_content})
+	</insert>
+
+    <insert id="noticeTest" useGeneratedKeys="true" keyProperty="id">
 		INSERT notice (member_id,notice_title,notice_content,notice_file)
 		VALUES (#{member_id},#{notice_title},#{notice_content},#{notice_file})
 	</insert>
-
 
 
 </mapper>
