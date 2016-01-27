@@ -84,8 +84,19 @@ public class MainController {
     
     //board PART
     
+    @RequestMapping(value="noticeDelete.do",method=RequestMethod.POST)
+    public String noticeDelete(@RequestParam("nid") int nid)throws Exception{
+    	System.out.println("ndid->>"+nid);
+    	
+    	noticeMapper.noticeDelete(nid);
+    	
+    	String url="redirect:/noticeList.do";
+    	return url;
     
-
+    	
+    	
+    }
+    
 	@RequestMapping(value="noticeWrite.do", method=RequestMethod.GET)
 	public ModelAndView fileUploadForm()throws Throwable {
 		

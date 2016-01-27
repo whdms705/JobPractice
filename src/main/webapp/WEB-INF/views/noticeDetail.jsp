@@ -72,15 +72,15 @@
 <!-- 나중에 관리자만 할수 있도록 수정 -->
 
 <form class="boardDetail" action="boardUpdateBefore.do"  method="post">
-<input type="hidden" name="nId" value="${nId}"/>
+<input type="hidden" name="nId" value="${nid}"/>
 <input type="submit"  class="btn btn-primary" value="수정" onclick="if(!confirm('정말로 수정하시겠습니까?')){return false;}"/>
 </form>
 
 
 
 
-<form class="boardDetail" action="boardDelete.do"  method="post">
-<input type="hidden" name="nId" value="${nId}"/>
+<form class="boardDetail" action="noticeDelete.do"  method="post">
+<input type="hidden" name="nid" value="${nid}"/>
 
 <input type="submit" class="btn btn-default" value="삭제" onclick="if(!confirm('정말 삭제 하시겠습니까?')){return false;}">
 
