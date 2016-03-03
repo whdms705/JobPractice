@@ -24,10 +24,9 @@ public class BoardService {
 		
 		String isSuccess=null;
 		
-		//String uploadPath = "/file/";
 		
 		String uploadPath =mRequest.getRealPath("/upload/");
-		
+		// 업로드한 파일을 담아둘 곳
 		
 		
 		File dir = new File(uploadPath);
@@ -47,7 +46,7 @@ public class BoardService {
 			if(saveFileName != null && !saveFileName.equals("")) {
 				if(new File(uploadPath + saveFileName).exists()) {
 					saveFileName = saveFileName + "_" + System.currentTimeMillis();
-					System.out.println("board->"+saveFileName);
+					// 만약 이미 업로드 한파일과 일치하다면  기존 파이 이름에 System.currentTimeMillis();  추가하여 구분 
 				}
 				
 				try {
@@ -61,9 +60,9 @@ public class BoardService {
 					e.printStackTrace();
 					
 				}
-			} // if end
-		} // while end
+			} 
+		} 
 		return isSuccess;
-	} // fileUpload end
+	} 
 
 }

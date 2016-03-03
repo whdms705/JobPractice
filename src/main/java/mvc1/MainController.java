@@ -11,103 +11,152 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+
 import mvc1.user.MemberMapper;
 
 import mvc1.board.BoardService;
 
 import mvc1.board.NoticeDTO;
 import mvc1.board.NoticeMapper;
+import mvc1.news.InfoDTO;
+import mvc1.news.NewsDTO;
+import mvc1.news.NewsMapper;
+import mvc1.news.RssService;
+import mvc1.news.UrlDTO;
 import mvc1.user.Member;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
 @Controller
 public class MainController {
 
-    @Autowired
-    private ClubMapper clubMapper;
-    @Autowired
-    private MemberMapper memberMapper;
-    @Autowired
-    private NoticeMapper noticeMapper;
-    
-    @Autowired
+
+	@Autowired
+	private MemberMapper memberMapper;
+	@Autowired
+	private NoticeMapper noticeMapper;
+	@Autowired
+	private NewsMapper newsMapper;
+
+	@Autowired
 	private BoardService boardService;
-	
-	
-	
-	
-	
-    
-    @RequestMapping("/main.do")
-    public String main(Model model){
-    	return "main";
-    }
-    
-    
-    
-    
-    //user PART 
-    @RequestMapping(value="/signUp.do", method=RequestMethod.GET)
-    public String hello(Model model) {
-        //자바 파일 처리하는 부분 
-        return "signUp";
-    }
+	@Autowired
+	private RssService rssService;
 
-    @RequestMapping(value="/signUp.do", method=RequestMethod.POST)
-    public String signUp(Member member, Model model)throws Exception{
-    	memberMapper.insert(member);
-    	return "redirect:/main.do";
-    }
-    
-    @RequestMapping("/login.do")
-    public String login(Model model){
-    	return "login";
-    }
-    
-    @RequestMapping(value="/loginPro.do", method=RequestMethod.POST)
-    public String loginPro(@RequestParam("studentNum") String studentNum ,@RequestParam("password") String password,Model model)throws Exception{
-    	 
-    	Member member=memberMapper.loginPro(studentNum,password);
-    	
-    	 model.addAttribute("member",member);
-    	 return "loginPro";
-    }
-    
 
-    
-    //board PART
-    
-    @RequestMapping(value="noticeDelete.do",method=RequestMethod.POST)
-    public String noticeDelete(@RequestParam("nid") int nid)throws Exception{
-    	System.out.println("ndid->>"+nid);
-    	
-    	noticeMapper.noticeDelete(nid);
-    	
-    	String url="redirect:/noticeList.do";
-    	return url;
-    
-    	
-    	
-    }
-    
-	@RequestMapping(value="noticeWrite.do", method=RequestMethod.GET)
-	public ModelAndView fileUploadForm()throws Throwable {
+	 final static Logger logger = LoggerFactory.getLogger(MainController.class);
+
+
+
+	@RequestMapping(value="/main.do")
+	public ModelAndView main(@RequestParam("category") String category,Model model) throws Exception{
 		
-		ModelAndView mav = new ModelAndView();
+        logger.debug("welcome() is executed, value {}", "mkyong");
 		
-		mav.setViewName("noticeWrite");
+		logger.error("This is Error message", new Exception("Testing"));
+		
+        ModelAndView mav = new ModelAndView();
+		
+        
+		String query=category;
+		
+		ArrayList<UrlDTO> list=rssService.getCatCodeList(query);
+        ArrayList<InfoDTO> infoList=rssService.getInfoList(list);
+        
+      
+       
+       mav.addObject("infoList",infoList);
+		
+		mav.setViewName("main");
+
+		
 		
 		return mav;
 	}
 	
+
+
+
+
 	
+
+
+
+	//user PART 
+	@RequestMapping(value="/signUp.do",method=RequestMethod.GET)
+	public String hello(Model model) {
+		//자바 파일 처리하는 부분 
+		return "signUp";
+	}
+
+	@RequestMapping(value="/signUp.do", method=RequestMethod.POST)
+	public String signUp(Member member, Model model)throws Exception{
+		memberMapper.insert(member);
+		return "redirect:/main.do";
+	}
+
+	@RequestMapping("/login.do")
+	public String login(Model model){
+		return "login";
+	}
+
+	@RequestMapping(value="/loginPro.do", method=RequestMethod.POST)
+	public String loginPro(@RequestParam("studentNum") String studentNum ,@RequestParam("password") String password,Model model)throws Exception{
+System.out.println("ddddddddddddddddddd");
+		Member member=memberMapper.loginPro(studentNum,password);
+
+		model.addAttribute("member",member);
+		return "loginPro";
+	}
+
+
+
+	//board PART
+
+	@RequestMapping(value="noticeDelete.do",method=RequestMethod.POST)
+	public String noticeDelete(@RequestParam("nid") int nid)throws Exception{
+		System.out.println("ndid->>"+nid);
+
+		noticeMapper.noticeDelete(nid);
+
+		String url="redirect:/noticeList.do";
+		return url;
+
+
+
+	}
+
+	@RequestMapping(value="noticeWrite.do", method=RequestMethod.GET)
+	public ModelAndView fileUploadForm()throws Throwable {
+
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName("noticeWrite");
+
+		return mav;
+	}
+
+
 	@RequestMapping(value="noticeInsert.do", method=RequestMethod.POST)
 	public ModelAndView fileUpload(MultipartHttpServletRequest mRequest)throws Exception{
 		NoticeDTO notice=new NoticeDTO(); //!!!
@@ -117,48 +166,48 @@ public class MainController {
 		String title=mRequest.getParameter("notice_title");
 		String content=mRequest.getParameter("notice_content");
 		file=boardService.fileUpload(mRequest);
-		
-		
-		
+
+
+
 		notice.setMember_id(nid);
 		notice.setNotice_title(title);
 		notice.setNotice_content(content);
 		notice.setNotice_file(file);
-		
-		
+
+
 		noticeMapper.noticeTest(notice);
-		
-		
+
+
 		mav.setViewName("main");
-		
+
 		return mav;
 	}
-    
-
-    
-    @RequestMapping(value="/noticeList.do",method=RequestMethod.GET)
-    public String noticeList(Model model){
-    	List<NoticeDTO> list=noticeMapper.noticeList();
-        model.addAttribute("list",list);
-        return "noticeList";
-    }
-    
-  
 
 
-    @RequestMapping(value="/noticeDetail.do",method=RequestMethod.GET)
-    public String noticeDetail(@RequestParam("nid") int nid,Model model){
-    	NoticeDTO notice=noticeMapper.noticeDetail(nid);
-    	model.addAttribute("notice",notice);
-    	return "noticeDetail";
-    	
-    }
-    
-    @RequestMapping(value="fileDownload.do",method=RequestMethod.POST)
-    public void fileDownload(HttpServletRequest request,HttpServletResponse response)throws Exception{
-    	System.out.println("aaaaaa");
-    	
-    	request.setCharacterEncoding("UTF-8");
+
+	@RequestMapping(value="/noticeList.do",method=RequestMethod.GET)
+	public String noticeList(Model model){
+		List<NoticeDTO> list=noticeMapper.noticeList();
+		model.addAttribute("list",list);
+		return "noticeList";
+	}
+
+
+
+
+	@RequestMapping(value="/noticeDetail.do",method=RequestMethod.GET)
+	public String noticeDetail(@RequestParam("nid") int nid,Model model){
+		NoticeDTO notice=noticeMapper.noticeDetail(nid);
+		model.addAttribute("notice",notice);
+		return "noticeDetail";
+
+	}
+
+	@RequestMapping(value="fileDownload.do",method=RequestMethod.POST)
+	public void fileDownload(HttpServletRequest request,HttpServletResponse response)throws Exception{
+		System.out.println("aaaaaa");
+
+		request.setCharacterEncoding("UTF-8");
 		// 다운받을 파일의 이름을 가져옴
 		String bFile=request.getParameter("file");
 		System.out.println(bFile);
@@ -193,15 +242,16 @@ public class MainController {
 		while((numRead = in.read(b, 0, b.length)) != -1){
 			out2.write(b, 0, numRead);
 		}
-		
-		 out2.flush();
-		 out2.close();
-		 in.close();
 
-    	
-    }
-    
+		out2.flush();
+		out2.close();
+		in.close();
 
-   
+
+	}
+
+
+
+
 
 }

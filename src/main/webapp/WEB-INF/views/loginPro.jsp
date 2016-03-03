@@ -23,7 +23,7 @@
    <c:set var="name" value="${member.name}" scope="session"/>
    <c:set var="author" value="${member.author}" scope="session"/>
      <script>
-     location.href="main.do";
+     location.href="main.do?category=IT";
      </script>
  </c:otherwise>
 </c:choose>

@@ -9,6 +9,8 @@
 </head>
 <body>
 
+
+
 <center><h1>·Î±×ÀÎ</h1></center>
 		<hr>
 		<form method="post" action="loginPro.do">
