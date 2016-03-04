@@ -42,7 +42,7 @@ public class RssService {
 	                
 	                
 	                if(query.equals(cat)){
-	                	System.out.println(id+"/"+name+"/"+type+"/"+cat+"/"+rss+"/");
+	                	
 	                    UrlDTO url = new UrlDTO(id, name, type, cat, rss);
 	                    list.add(url);
 	                }//선택한 종류 정보만  list add 
@@ -66,7 +66,7 @@ public class RssService {
 		
 		 InfoDTO info=null;
 		 
-		 System.out.println("size->>"+list.size());
+		
 		 
 		 for(UrlDTO u:list){
 			 Document doc = Jsoup.connect(u.getRss()).get();
@@ -75,9 +75,9 @@ public class RssService {
 			 Elements name=doc.select("item title");
 			 
 			 for(Element n: name){
-					System.out.println("-----------------------------------------");
+					
 					String title=n.text();
-					System.out.println("title->"+title);
+					
 					info=new InfoDTO();
 					info.setName(title);
 					infoList.add(info);
@@ -88,13 +88,13 @@ public class RssService {
 			 
 			 
 			 Elements url=doc.select("item link");
-			 System.out.println("linktest->"+url.size());
+			
 			 
 			 
 			 for(Element r: url){
-					System.out.println("-----------------------------------------");
+					
 					String articleUrl=r.text();
-					System.out.println("url->>"+articleUrl);
+					
 					InfoDTO in=infoList.get(i);
 					in.setUrl(articleUrl);
 					infoList.set(i, in);
@@ -103,13 +103,13 @@ public class RssService {
 			 }
 			 
 			 Elements des=doc.select("item description");
-			 System.out.println("linktest->"+des.size());
+		
 			 
 			 
 			 for(Element d:des){
-					System.out.println("-----------------------------------------");
+					
 					String descript=d.text();
-					System.out.println("descript->>"+descript);
+					
 					InfoDTO in=infoList.get(j);
 					in.setDescription(descript);
 					infoList.set(j, in);
@@ -118,13 +118,13 @@ public class RssService {
 			 }
 			 
 			 Elements date=doc.select("item pubDate");
-			 System.out.println("linktest->"+date.size());
+			
 			 
 			 
 			 for(Element t:date){
-					System.out.println("-----------------------------------------");
+					
 					String pubdate=t.text();
-					System.out.println("descript->>"+pubdate);
+				
 					InfoDTO in=infoList.get(z);
 					in.setDate(pubdate);
 					infoList.set(z, in);

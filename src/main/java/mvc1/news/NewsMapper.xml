@@ -11,7 +11,7 @@
 
 	<insert id="newsInsert" useGeneratedKeys="true" keyProperty="id">
 		INSERT news(news_title,member_id,news_url,news_date,news_description)
-		VALUES (#{title},#{mid},#{url},#{date},#{description})
+		VALUES (#{name},#{mid},#{url},#{date},#{description})
 	</insert>
 
 

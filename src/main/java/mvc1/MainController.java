@@ -28,6 +28,8 @@ import mvc1.user.Member;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 import javax.servlet.ServletOutputStream;
@@ -67,38 +69,43 @@ public class MainController {
 	 final static Logger logger = LoggerFactory.getLogger(MainController.class);
 
 
+	 @RequestMapping(value="index.do")
+	 public String index(){
+		return "index";
+	 }
 
 	@RequestMapping(value="/main.do")
 	public ModelAndView main(@RequestParam("category") String category,Model model) throws Exception{
 		
         logger.debug("welcome() is executed, value {}", "mkyong");
+		//logger.error("This is Error message", new Exception("Testing"));
 		
-		logger.error("This is Error message", new Exception("Testing"));
-		
-        ModelAndView mav = new ModelAndView();
-		
-        
+        ModelAndView mav = new ModelAndView();  
+       
 		String query=category;
+	
+		
+		
 		
 		ArrayList<UrlDTO> list=rssService.getCatCodeList(query);
         ArrayList<InfoDTO> infoList=rssService.getInfoList(list);
-        
       
-       
        mav.addObject("infoList",infoList);
-		
 		mav.setViewName("main");
-
-		
-		
 		return mav;
 	}
 	
-
-
-
-
+    //news part
 	
+	@RequestMapping(value="/newsInsert.do",method=RequestMethod.POST)
+	public String newsInsert(@RequestParam("category") String category,InfoDTO info)throws Exception{
+		newsMapper.newsInsert(info);
+		category= URLEncoder.encode(category, "UTF-8");//redirect 한글깨짐현상 해결ㄴ
+		String url="redirect:/main.do?category="+category;
+		
+		return url;
+	
+	}
 
 
 
@@ -111,8 +118,9 @@ public class MainController {
 
 	@RequestMapping(value="/signUp.do", method=RequestMethod.POST)
 	public String signUp(Member member, Model model)throws Exception{
+		System.out.println("meber_>>"+member.getEmail());
 		memberMapper.insert(member);
-		return "redirect:/main.do";
+		return "redirect:/index.do";
 	}
 
 	@RequestMapping("/login.do")

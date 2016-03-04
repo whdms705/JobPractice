@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,7 +11,8 @@
 
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<c:set var="studentNum" value="${studentNum}"/>
+<c:set var="mid" value="${studentNum}"/>
+<c:set var="category" value="${param.category}" scope="request" />
 <title>Insert title here</title>
 </head>
 <body>
@@ -66,19 +66,22 @@
 		<!-- ajax롤 보낼곳 -->
 		<c:forEach var="info" items="${infoList}">
 		<div class="rssinfo">
+		<form action="newsInsert.do" method="post">
 		<h4 class="rssinfo_header"><a href="${info.url}">${info.name}</a></h4><br>
-		<input type="hidden" value="${info.name}" name="infoname"/>
-	    <input type="hidden" value="${info.url}" name="infourl"/>
+		<input type="hidden" value="${category}" name="category"/>
+		<input type="hidden" value="${mid}" name="mid"/>
+		<input type="hidden" value="${info.name}" name="name"/>
+	    <input type="hidden" value="${info.url}" name="url"/>
 	
 		    <p class="rssinfo_date">${info.date}</p>
-		      <input type="hidden" value="${info.date}" name="infodate"/>
+		      <input type="hidden" value="${info.date}" name="date"/>
 		    <p class="rssinfo_description">${info.description}</p>
-		      <input type="hidden" value="${info.description}" name="infodescription"/>
+		      <input type="hidden" value="${info.description}" name="description"/>
 		    <p class="rssinfo_save">
-		    <span class="save" onclick="rssclip(${studentNum})">clip</span>
+		    <input type="submit" class="save" value="clip">
 		    </p>
 		    
-		 
+		 </form>
 		</div>
 		
 			

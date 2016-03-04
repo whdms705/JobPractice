@@ -158,8 +158,7 @@ p.rssinfo_description {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-
-span.save {
+input.save {
 	background-color: #a1a7ad;
 	color: #fff;
 	line-height: 1;
