@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
              "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-             
+
 <mapper namespace="mvc1.user.MemberMapper">
 
 
 
 
-    <select id="loginPro"  parameterType="String" resultType="mvc1.user.Member">
-  SELECT * FROM member WHERE studentNum=#{studentNum} and password=#{password}
-    </select>
-    
+	<select id="loginPro" parameterType="String" resultType="mvc1.user.Member">
+		SELECT * FROM member WHERE studentNum=#{studentNum} and password=#{password}
+	</select>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT member (studentNum,name,email,password) 
-        VALUES (#{studentNum},#{name},#{email},#{password})
-    </insert>
-    
-    
+	<select id="myNews" resultType="mvc1.news.InfoDTO">
+		select * from news where member_id=#{mid}
+	</select>
+
+	<select id="myUpdatePro" resultType="mvc1.user.Member">
+		select * from member where studentNum=#{mid}
+	</select>
+
+
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT member (studentNum,name,email,password)
+		VALUES (#{studentNum},#{name},#{email},#{password})
+	</insert>
+
+	<update id="myUpdate">
+		UPDATE member SET name = #{name},email=#{email},password=#{password}
+		 WHERE studentNum= #{studentNum}
+	</update>
+
+
 
 </mapper>

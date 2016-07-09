@@ -17,6 +17,7 @@
 </head>
 <body>
 	<div id="wrap">
+		
 		<header id="header"> <section
 			class="nav-main nav-main-mini navbar" role="navigation"
 			style="background-color:#2d3a45">
@@ -67,16 +68,16 @@
 		<c:forEach var="info" items="${infoList}">
 		<div class="rssinfo">
 		<form action="newsInsert.do" method="post">
-		<h4 class="rssinfo_header"><a href="${info.url}">${info.name}</a></h4><br>
+		<h4 class="rssinfo_header"><a href="${info.news_url}">${info.news_title}</a></h4><br>
 		<input type="hidden" value="${category}" name="category"/>
-		<input type="hidden" value="${mid}" name="mid"/>
-		<input type="hidden" value="${info.name}" name="name"/>
-	    <input type="hidden" value="${info.url}" name="url"/>
+		<input type="hidden" value="${mid}" name="member_id"/>
+		<input type="hidden" value="${info.news_title}" name="news_title"/>
+	    <input type="hidden" value="${info.news_url}" name="news_url"/>
 	
-		    <p class="rssinfo_date">${info.date}</p>
-		      <input type="hidden" value="${info.date}" name="date"/>
-		    <p class="rssinfo_description">${info.description}</p>
-		      <input type="hidden" value="${info.description}" name="description"/>
+		    <p class="rssinfo_date">${info.news_date}</p>
+		      <input type="hidden" value="${info.news_date}" name="news_date"/>
+		    <p class="rssinfo_description">${info.news_description}</p>
+		      <input type="hidden" value="${info.news_description}" name="news_description"/>
 		    <p class="rssinfo_save">
 		    <input type="submit" class="save" value="clip">
 		    </p>

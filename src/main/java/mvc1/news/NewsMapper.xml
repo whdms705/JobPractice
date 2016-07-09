@@ -6,16 +6,20 @@
 
 
 
-	
+
 
 
 	<insert id="newsInsert" useGeneratedKeys="true" keyProperty="id">
 		INSERT news(news_title,member_id,news_url,news_date,news_description)
-		VALUES (#{name},#{mid},#{url},#{date},#{description})
+		VALUES(#{news_title},#{member_id},#{news_url},#{news_date},#{news_description})
 	</insert>
 
+	<delete id="newsDelete">
+		DELETE FROM news
+		WHERE news_id = #{news_id}
+	</delete>
 
-	
+
 
 
 </mapper>

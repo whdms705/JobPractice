@@ -79,7 +79,7 @@ public class RssService {
 					String title=n.text();
 					
 					info=new InfoDTO();
-					info.setName(title);
+					info.setNews_title(title);
 					infoList.add(info);
 					
 				}
@@ -96,7 +96,7 @@ public class RssService {
 					String articleUrl=r.text();
 					
 					InfoDTO in=infoList.get(i);
-					in.setUrl(articleUrl);
+					in.setNews_url(articleUrl);
 					infoList.set(i, in);
 					i++;
 					
@@ -111,7 +111,7 @@ public class RssService {
 					String descript=d.text();
 					
 					InfoDTO in=infoList.get(j);
-					in.setDescription(descript);
+					in.setNews_description(descript);
 					infoList.set(j, in);
 					j++;
 					
@@ -126,7 +126,7 @@ public class RssService {
 					String pubdate=t.text();
 				
 					InfoDTO in=infoList.get(z);
-					in.setDate(pubdate);
+					in.setNews_date(pubdate);
 					infoList.set(z, in);
 					z++;
 					

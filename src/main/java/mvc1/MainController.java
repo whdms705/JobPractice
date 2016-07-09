@@ -66,45 +66,64 @@ public class MainController {
 	private RssService rssService;
 
 
-	 final static Logger logger = LoggerFactory.getLogger(MainController.class);
+	final static Logger logger = LoggerFactory.getLogger(MainController.class);
+	
+	 @RequestMapping("/test.do")
+	    public String main(Model model) throws IOException{
+	        
+	        Document doc = Jsoup.connect("http://www.hankyung.com/news/app/newsview.php?aid=201604101629g&amp;sid=newsIndustry&amp;nid=000&rss=r").get();
+	        Elements titles = doc.select("article#newsView");
+	        
+	        System.out.println("---------1------------------ "+titles.text());
+	       /* for(Element e: titles){
+	        	System.out.println("---------------2----------------");
+	            System.out.println("download: " + e.text());
+	        }*/
+	        return "index";
+	    }
 
 
-	 @RequestMapping(value="index.do")
-	 public String index(){
+
+	@RequestMapping(value="index.do")
+	public String index(){
 		return "index";
-	 }
+	}
 
 	@RequestMapping(value="/main.do")
 	public ModelAndView main(@RequestParam("category") String category,Model model) throws Exception{
-		
-        logger.debug("welcome() is executed, value {}", "mkyong");
+
+		logger.debug("welcome() is executed, value {}", "mkyong");
 		//logger.error("This is Error message", new Exception("Testing"));
-		
-        ModelAndView mav = new ModelAndView();  
-       
+		ModelAndView mav = new ModelAndView();  
 		String query=category;
-	
-		
-		
-		
 		ArrayList<UrlDTO> list=rssService.getCatCodeList(query);
-        ArrayList<InfoDTO> infoList=rssService.getInfoList(list);
-      
-       mav.addObject("infoList",infoList);
+		ArrayList<InfoDTO> infoList=rssService.getInfoList(list);
+
+		mav.addObject("infoList",infoList);
 		mav.setViewName("main");
 		return mav;
 	}
-	
-    //news part
-	
+
+	//news part
+
 	@RequestMapping(value="/newsInsert.do",method=RequestMethod.POST)
 	public String newsInsert(@RequestParam("category") String category,InfoDTO info)throws Exception{
 		newsMapper.newsInsert(info);
-		category= URLEncoder.encode(category, "UTF-8");//redirect 한글깨짐현상 해결ㄴ
+		category= URLEncoder.encode(category, "UTF-8");//redirect 한글깨짐현상 해결
 		String url="redirect:/main.do?category="+category;
-		
 		return url;
+
+	}
 	
+	@RequestMapping(value="/newsDelete.do",method=RequestMethod.POST)
+	public String newsDelete(@RequestParam("news_id")int nid,@RequestParam("category") String category,InfoDTO info)throws Exception{
+	
+		String mid=info.getMember_id();
+		newsMapper.newsDelete(nid);
+		String url="redirect:/myPage.do?mid="+mid+"&category="+category;
+		return url;
+		
+		
 	}
 
 
@@ -112,13 +131,11 @@ public class MainController {
 	//user PART 
 	@RequestMapping(value="/signUp.do",method=RequestMethod.GET)
 	public String hello(Model model) {
-		//자바 파일 처리하는 부분 
 		return "signUp";
 	}
 
 	@RequestMapping(value="/signUp.do", method=RequestMethod.POST)
 	public String signUp(Member member, Model model)throws Exception{
-		System.out.println("meber_>>"+member.getEmail());
 		memberMapper.insert(member);
 		return "redirect:/index.do";
 	}
@@ -130,13 +147,51 @@ public class MainController {
 
 	@RequestMapping(value="/loginPro.do", method=RequestMethod.POST)
 	public String loginPro(@RequestParam("studentNum") String studentNum ,@RequestParam("password") String password,Model model)throws Exception{
-System.out.println("ddddddddddddddddddd");
 		Member member=memberMapper.loginPro(studentNum,password);
 
 		model.addAttribute("member",member);
 		return "loginPro";
 	}
 
+	
+	@RequestMapping(value="/myPage.do")
+	public String myPage(){
+		return "myPage";
+	}
+	
+	@RequestMapping(value="/myPage.do",method=RequestMethod.GET)
+	public ModelAndView myPages(@RequestParam("category")String category,@RequestParam("mid") String mid,Model model){
+		
+		ModelAndView mav=new ModelAndView();
+		String category1,category2,category3;
+		String query=category;
+		
+		List<InfoDTO> list=null;
+		Member member=null;
+		category1="myNews";
+		category2="breakaway";
+		category3="update";
+		if(query.equals(category1)){
+			list=memberMapper.myNews(mid);
+			mav.addObject("infoList",list);
+		}else if(query.equals(category2)){
+			
+		}else if(query.equals(category3)){
+			member=memberMapper.myUpdatePro(mid);
+			mav.addObject("member",member);
+			
+		}
+			mav.setViewName("myPage");
+			return mav;
+			
+	}
+	
+	@RequestMapping(value="myUpdate.do",method=RequestMethod.POST)
+	public String myUpdate(@RequestParam("category")String category,Member member)throws Exception{
+		memberMapper.myUpdate(member);
+		String url="redirect:/myPage.do?mid="+member.getStudentNum()+"&category="+category;
+		return url;
+	}
 
 
 	//board PART

@@ -8,4 +8,6 @@ public interface NewsMapper {
 	
 	void newsInsert(InfoDTO info);
 
+	void newsDelete(int nid);
+	
 }
